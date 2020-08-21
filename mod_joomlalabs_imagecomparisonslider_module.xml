@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="module" version="3.8" client="site" method="upgrade">
+	<name>MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE</name>
+	<creationDate>19/08/20</creationDate>
+	<author>Joomla!LABS</author>
+	<authorEmail>info@joomlalabs.com</authorEmail>
+	<authorUrl>https://joomlalabs.com</authorUrl>
+	<copyright>Copyright (C) 2015 - 2020 Joomla!LABS. All rights reserved.</copyright>
+	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+	<version>1.0.0</version>
+	<description>MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_XML_DESCRIPTION</description>
+
+	<files>
+		<filename module="mod_joomlalabs_imagecomparisonslider_module">mod_joomlalabs_imagecomparisonslider_module.php</filename>
+		<folder>tmpl</folder>
+		<folder>language</folder>
+		<folder>src</folder>
+		<filename>mod_joomlalabs_imagecomparisonslider_module.xml</filename>
+	</files>
+
+	<!-- Update servers -->
+	<updateservers>
+		<server type="extension" priority="1" name="Joomla!LABS Image Comparison Slider Module Update Server">
+			https://raw.githubusercontent.com/JoomlaLABS/updateservers/master/mod_joomlalabs_imagecomparisonslider_module.xml
+		</server>
+	</updateservers>
+
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+				<field
+						name="left_image"
+						type="media"
+						label="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_LEFT_IMAGE"
+						description="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_LEFT_IMAGE_DESCRIPTION"
+				/>
+				<field
+						name="left_alt"
+						type="text"
+						label="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_LEFT_IMAGE"
+						description="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_LEFT_IMAGE_DESCRIPTION"
+						size="30"
+				/>
+				<field
+						name="left_caption"
+						type="text"
+						label="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_LEFT_IMAGE"
+						description="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_LEFT_IMAGE_DESCRIPTION"
+						size="30"
+				/>
+				<field
+						name="right_image"
+						type="media"
+						label="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_RIGHT_IMAGE"
+						description="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_RIGHT_IMAGE_DESCRIPTION"
+				/>
+				<field
+						name="right_alt"
+						type="text"
+						label="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_RIGHT_IMAGE"
+						description="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_RIGHT_IMAGE_DESCRIPTION"
+						size="30"
+				/>
+				<field
+						name="right_caption"
+						type="text"
+						label="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_RIGHT_IMAGE"
+						description="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_RIGHT_IMAGE_DESCRIPTION"
+						size="30"
+				/>
+			</fieldset>
+			<fieldset name="advanced">
+				<field
+						name="moduleclass_sfx"
+						type="text"
+						label="COM_MODULES_FIELD_MODULECLASS_SFX_LABEL"
+						description="COM_MODULES_FIELD_MODULECLASS_SFX_DESC" />
+				<field
+						name="mymodulelayout"
+						type="modulelayout"
+						label="JFIELD_ALT_LAYOUT_LABEL"
+						description="JFIELD_ALT_MODULE_LAYOUT_DESC"
+				/>
+			</fieldset>
+		</fields>
+	</config>
+</extension>
