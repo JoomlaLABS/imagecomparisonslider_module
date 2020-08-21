@@ -10,9 +10,7 @@
 
 defined('_JEXEC') or die;
 
-use Joomla\CMS\Factory;
-
-$document = Factory::getDocument();
+$document = $app->getDocument();
 $document->addStyleSheet('/modules/mod_joomlalabs_imagecomparisonslider_module/src/imagecomparisonslider.css');
 $document->addScript('/modules/mod_joomlalabs_imagecomparisonslider_module/src/imagecomparisonslider.js');
 
