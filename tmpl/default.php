@@ -10,9 +10,10 @@
 
 defined('_JEXEC') or die;
 
+
 $document = $app->getDocument();
-$document->addStyleSheet('/modules/mod_joomlalabs_imagecomparisonslider_module/src/imagecomparisonslider.css');
-$document->addScript('/modules/mod_joomlalabs_imagecomparisonslider_module/src/imagecomparisonslider.js');
+$document->addStyleSheet('/media/mod_joomlalabs_imagecomparisonslider_module/css/imagecomparisonslider.css', array('version' => 'auto'));
+$document->addScript('/media/mod_joomlalabs_imagecomparisonslider_module/js/imagecomparisonslider.js', array('version' => 'auto'));
 
 // Access to module parameters
 $left_image = $params->get('left_image');

@@ -1,6 +1,13 @@
-/*
-    Code inspired from Image Comparison Slider
-    https://github.com/CodyHouse/image-comparison-slider
+/**
+ * Image Comparison Slider
+ * A handy draggable slider to quickly compare 2 images, powered by CSS3 and jQuery.
+ * https://github.com/CodyHouse/image-comparison-slider
+ *
+ * Copyright CodyHouse - https://codyhouse.co
+ *
+ * Released under the MIT License
+ *
+ * Released on: May 2, 2016
  */
 
 .cs-image-container {
