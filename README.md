@@ -7,6 +7,10 @@ Joomla!LABS Image Comparison Slider Module
 
 A Image Comparison Slider Module for Joomla! 4.
 
+Developed using
+
+<a href="https://codyhouse.co/gem/css-jquery-image-comparison-slider" target="_blank"><img src="https://codyhouse.co/demo/style-guide-template/assets/branding/favicon-1.jpg" width="10%" alt="codyhouse.co" /></a>
+
 
 Site Preview
 ---------------------
