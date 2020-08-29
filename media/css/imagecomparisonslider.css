@@ -16,7 +16,7 @@
 }
 .cs-image-container img {
     display: block;
-    min-width: 100%;
+    width: 100%;
 }
 
 .cs-image-label {
