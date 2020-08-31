@@ -129,7 +129,7 @@
     margin-left: -22px;
     margin-top: -22px;
     border-radius: 50%;
-    /* background: #dc717d url("../img/cd-arrows.svg") no-repeat center center; */
+    /* background: var(--primary)  no-repeat center center; */
     cursor: move;
     box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     opacity: 0;
@@ -139,14 +139,20 @@
     -o-transform: translate3d(0, 0, 0) scale(0);
     transform: translate3d(0, 0, 0) scale(0);
 }
-.cs-handle:before {
-    position: absolute;
-    font-family: 'Font Awesome 5 Free';
-    font-size: 1.5rem;
-    top: 6px;
-    left: 12px;
-    content: "\f337";
+.cs-handle .cs-icon {
+    height: 36px;
+    width: 36px;
+    display: inline-block;
+    margin-top: 4px;
+    margin-left: 4px;
+    -webkit-mask: url("../images/slide-h.svg") no-repeat 50% 50%;
+    mask: url("../images/slide-h.svg") no-repeat 50% 50%;
+    background-color: #ffffff;
 }
+.cs-handle:hover .cs-icon {
+    background-color: #ececec;
+}
+
 .cs-handle.draggable {
     /* change background color when element is active */
     /* background-color: #445b7c; */

@@ -34,5 +34,5 @@ $right_caption = $params->get('right_caption');
         <span class="cs-image-label" data-type="left"><?php echo $left_caption; ?></span>
     </div>
 
-    <span class="cs-handle btn-primary"></span> <!-- slider handle -->
+    <span class="cs-handle btn-primary"><i class="cs-icon"></i></span> <!-- slider handle -->
 </figure> <!-- cs-image-container -->
