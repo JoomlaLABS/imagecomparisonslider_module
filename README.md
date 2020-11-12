@@ -22,4 +22,4 @@ Site Preview
 
 Administrator Preview
 ---------------------
-
+![screenshot](https://joomlalabs.sviluppo.online/images/extension/jl-image-comparison-slider/backend-configuration.png "Joomla!LABS Image Comparison Slider Module backend configuration")
