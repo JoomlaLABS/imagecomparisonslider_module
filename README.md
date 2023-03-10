@@ -23,3 +23,7 @@ Site Preview
 Administrator Preview
 ---------------------
 ![screenshot](https://joomlalabs.sviluppo.online/images/extension/jl-image-comparison-slider/backend-configuration.png "Joomla!LABS Image Comparison Slider Module backend configuration")
+
+Donate
+---------------------
+<a href="https://www.buymeacoffee.com/razzo"><img src="https://img.buymeacoffee.com/button-api/?text=Buy me a beer&emoji=🍺&slug=razzo&button_colour=FFDD00&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" /></a>
