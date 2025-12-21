@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="module" client="site" method="upgrade">
 	<name>MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE</name>
-	<creationDate>19/08/20</creationDate>
+	<creationDate>@date@</creationDate>
 	<author>Joomla!LABS</author>
 	<authorEmail>info@joomlalabs.com</authorEmail>
 	<authorUrl>https://joomlalabs.com</authorUrl>
-	<copyright>Copyright (C) 2015 - 2020 Joomla!LABS. All rights reserved.</copyright>
+	<copyright>Copyright (C) 2015 - 2025 Joomla!LABS. All rights reserved.</copyright>
 	<license>GNU General Public License version 2 or later; see LICENSE.txt</license>
-	<version>1.2.0</version>
+	<version>@version@</version>
 	<description>MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_XML_DESCRIPTION</description>
+	<namespace path="src">JoomlaLabs\Module\ImageComparisonSlider</namespace>
 
 	<files>
-		<filename module="mod_joomlalabs_imagecomparisonslider_module">mod_joomlalabs_imagecomparisonslider_module.php</filename>
+		<folder module="mod_joomlalabs_imagecomparisonslider_module">services</folder>
+		<folder>src</folder>
 		<folder>tmpl</folder>
 		<folder>language</folder>
-		<folder>media</folder>
 		<filename>mod_joomlalabs_imagecomparisonslider_module.xml</filename>
 	</files>
 
@@ -22,6 +23,7 @@
 		<folder>images</folder>
 		<folder>css</folder>
 		<folder>js</folder>
+		<filename>joomla.asset.json</filename>
 	</media>
 
 	<!-- Update servers -->
@@ -74,13 +76,21 @@
 						description="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_RIGHT_IMAGE_CAPTION_DESCRIPTION"
 						size="30"
 				/>
+				<field
+						name="aria_label"
+						type="text"
+						label="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_ARIA_LABEL"
+						description="MOD_JOOMLALABS_IMAGECOMPARISONSLIDER_MODULE_ARIA_LABEL_DESCRIPTION"
+						default="Image comparison slider"
+						size="50"
+				/>
 			</fieldset>
 			<fieldset name="advanced">
 				<field
 						name="layout"
 						type="modulelayout"
 						label="JFIELD_ALT_LAYOUT_LABEL"
-						class="custom-select"
+						class="form-select"
 				/>
 				<field
 						name="moduleclass_sfx"

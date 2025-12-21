@@ -1,0 +1,23 @@
+{
+  "$schema": "https://developer.joomla.org/schemas/json-schema/web_assets.json",
+  "name": "mod_joomlalabs_imagecomparisonslider_module",
+  "version": "2.0.0",
+  "description": "Image Comparison Slider Module Assets - Documentation only (assets are registered programmatically in Dispatcher)",
+  "license": "GPL-2.0-or-later",
+  "assets": [
+    {
+      "name": "imagecomparisonslider.style",
+      "type": "style",
+      "uri": "mod_joomlalabs_imagecomparisonslider_module/css/imagecomparisonslider.css"
+    },
+    {
+      "name": "imagecomparisonslider.slider.js",
+      "type": "script",
+      "uri": "mod_joomlalabs_imagecomparisonslider_module/js/imagecomparisonslider.js",
+      "attributes": {
+        "defer": true,
+        "type": "module"
+      }
+    }
+  ]
+}

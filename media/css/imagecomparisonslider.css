@@ -1,22 +1,31 @@
 /**
  * Image Comparison Slider
- * A handy draggable slider to quickly compare 2 images, powered by CSS3 and jQuery.
+ * A handy draggable slider to quickly compare 2 images, powered by modern CSS.
  * https://github.com/CodyHouse/image-comparison-slider
  *
  * Copyright CodyHouse - https://codyhouse.co
+ * Optimized for Joomla 6+ by Joomla!LABS
  *
  * Released under the MIT License
- *
- * Released on: May 2, 2016
+ * @version 2.0.0
+ * @since   2.0.0
  */
 
 .cs-image-container {
     position: relative;
     margin: 0em auto;
+    /* Enable GPU acceleration */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    /* Optimize touch scrolling */
+    -webkit-overflow-scrolling: touch;
 }
 .cs-image-container img {
     display: block;
     width: 100%;
+    /* Optimize image rendering */
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
 }
 
 .cs-image-label {
@@ -56,14 +65,12 @@
     width: 0;
     height: 100%;
     overflow: hidden;
-    /* Force Hardware Acceleration in WebKit */
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
+    /* Force Hardware Acceleration */
     transform: translateZ(0);
-    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    will-change: width;
+    /* Optimize for 60fps */
+    contain: layout style paint;
 }
 .cs-resize-img img {
     position: absolute;
@@ -73,6 +80,8 @@
     height: 100%;
     width: auto;
     max-width: none;
+    /* GPU acceleration for images */
+    transform: translateZ(0);
 }
 .cs-resize-img .cs-image-label {
     right: auto;
@@ -129,42 +138,53 @@
     margin-left: -22px;
     margin-top: -22px;
     border-radius: 50%;
-    /* background: var(--primary)  no-repeat center center; */
     cursor: move;
     box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
     opacity: 0;
-    -webkit-transform: translate3d(0, 0, 0) scale(0);
-    -moz-transform: translate3d(0, 0, 0) scale(0);
-    -ms-transform: translate3d(0, 0, 0) scale(0);
-    -o-transform: translate3d(0, 0, 0) scale(0);
     transform: translate3d(0, 0, 0) scale(0);
+    /* Optimize for touch */
+    touch-action: none;
+    will-change: left, transform;
+    /* GPU acceleration */
+    backface-visibility: hidden;
+    /* Center icon with flexbox */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+/* Increase touch target on mobile */
+@media (max-width: 768px) {
+    .cs-handle {
+        height: 54px;
+        width: 54px;
+        margin-left: -27px;
+        margin-top: -27px;
+    }
+}
+
 .cs-handle .cs-icon {
     height: 36px;
     width: 36px;
-    display: inline-block;
-    margin-top: 4px;
-    margin-left: 4px;
+    display: block;
     -webkit-mask: url("../images/slide-h.svg") no-repeat 50% 50%;
     mask: url("../images/slide-h.svg") no-repeat 50% 50%;
     background-color: #ffffff;
+    /* GPU acceleration */
+    transform: translateZ(0);
+    flex-shrink: 0;
 }
-.cs-handle:hover .cs-icon {
+.cs-handle:hover .cs-icon,
+.cs-handle:active .cs-icon {
     background-color: #ececec;
 }
 
 .cs-handle.draggable {
-    /* change background color when element is active */
-    /* background-color: #445b7c; */
+    cursor: grabbing;
+    cursor: -webkit-grabbing;
 }
 .is-visible .cs-handle {
     opacity: 1;
-    -webkit-transform: translate3d(0, 0, 0) scale(1);
-    -moz-transform: translate3d(0, 0, 0) scale(1);
-    -ms-transform: translate3d(0, 0, 0) scale(1);
-    -o-transform: translate3d(0, 0, 0) scale(1);
     transform: translate3d(0, 0, 0) scale(1);
-    -webkit-transition: -webkit-transform 0.3s 0.7s, opacity 0s 0.7s;
-    -moz-transition: -moz-transform 0.3s 0.7s, opacity 0s 0.7s;
     transition: transform 0.3s 0.7s, opacity 0s 0.7s;
 }
