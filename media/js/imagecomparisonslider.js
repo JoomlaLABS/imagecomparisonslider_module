@@ -1,12 +1,11 @@
 /**
  * Image Comparison Slider - Modern Vanilla JS Version
- * A handy draggable slider to quickly compare 2 images, powered by modern Web APIs.
- * 
  * Based on: https://github.com/CodyHouse/image-comparison-slider
- * Original Copyright: CodyHouse - https://codyhouse.co
  * 
+ * Original Copyright: CodyHouse - https://codyhouse.co
  * Modernized for Joomla 6+ by Joomla!LABS
- * Released under the MIT License
+ * 
+ * @license     Released under the MIT License
  * 
  * @version 2.0.0
  * @since   2.0.0
@@ -16,262 +15,293 @@
     'use strict';
 
     /**
+     * Swipe Content Helper Class
+     * Handles swipe and drag gestures
+     */
+    class SwipeContent {
+        constructor(element) {
+            this.element = element;
+            this.delta = [false, false];
+            this.dragging = false;
+            this.intervalId = false;
+            
+            // Bind methods once to maintain references
+            this.boundHandleEvent = this.handleEvent.bind(this);
+            
+            this.element.addEventListener('mousedown', this.boundHandleEvent);
+            this.element.addEventListener('touchstart', this.boundHandleEvent, { passive: true });
+        }
+
+        handleEvent(event) {
+            switch (event.type) {
+                case 'mousedown':
+                case 'touchstart':
+                    this.handleDragStart(event);
+                    break;
+                case 'mousemove':
+                case 'touchmove':
+                    this.handleDragging(event);
+                    break;
+                case 'mouseup':
+                case 'mouseleave':
+                case 'touchend':
+                    this.handleDragEnd(event);
+                    break;
+            }
+        }
+
+        handleDragStart(event) {
+            this.dragging = true;
+            this.element.addEventListener('mousemove', this.boundHandleEvent);
+            this.element.addEventListener('touchmove', this.boundHandleEvent, { passive: true });
+            this.element.addEventListener('mouseup', this.boundHandleEvent);
+            this.element.addEventListener('mouseleave', this.boundHandleEvent);
+            this.element.addEventListener('touchend', this.boundHandleEvent);
+            
+            const touch = this.getTouch(event);
+            this.delta = [parseInt(touch.clientX), parseInt(touch.clientY)];
+            this.emitSwipeEvents('dragStart', this.delta, event.target);
+        }
+
+        handleDragging(event) {
+            if (!this.dragging) return;
+            
+            if (window.requestAnimationFrame) {
+                this.intervalId = window.requestAnimationFrame(this.emitDragging.bind(this, event));
+            } else {
+                this.intervalId = setTimeout(() => {
+                    this.emitDragging(event);
+                }, 250);
+            }
+        }
+
+        handleDragEnd(event) {
+            if (this.intervalId) {
+                window.requestAnimationFrame ? 
+                    window.cancelAnimationFrame(this.intervalId) : 
+                    clearInterval(this.intervalId);
+                this.intervalId = false;
+            }
+            
+            this.element.removeEventListener('mousemove', this.boundHandleEvent);
+            this.element.removeEventListener('touchmove', this.boundHandleEvent);
+            this.element.removeEventListener('mouseup', this.boundHandleEvent);
+            this.element.removeEventListener('mouseleave', this.boundHandleEvent);
+            this.element.removeEventListener('touchend', this.boundHandleEvent);
+            
+            const touch = this.getTouch(event);
+            const x = parseInt(touch.clientX);
+            const y = parseInt(touch.clientY);
+            
+            if (this.delta && (this.delta[0] || this.delta[0] === 0)) {
+                const deltaX = x - this.delta[0];
+                if (Math.abs(deltaX) > 30) {
+                    this.emitSwipeEvents(deltaX < 0 ? 'swipeLeft' : 'swipeRight', [x, y]);
+                }
+                this.delta[0] = false;
+            }
+            
+            if (this.delta && (this.delta[1] || this.delta[1] === 0)) {
+                const deltaY = y - this.delta[1];
+                if (Math.abs(deltaY) > 30) {
+                    this.emitSwipeEvents(deltaY < 0 ? 'swipeUp' : 'swipeDown', [x, y]);
+                }
+                this.delta[1] = false;
+            }
+            
+            this.emitSwipeEvents('dragEnd', [x, y]);
+            this.dragging = false;
+        }
+
+        emitDragging(event) {
+            const touch = this.getTouch(event);
+            this.emitSwipeEvents('dragging', [parseInt(touch.clientX), parseInt(touch.clientY)]);
+        }
+
+        getTouch(event) {
+            return event.changedTouches ? event.changedTouches[0] : event;
+        }
+
+        emitSwipeEvents(eventName, coordinates, origin = false) {
+            const event = new CustomEvent(eventName, {
+                detail: {
+                    x: coordinates[0],
+                    y: coordinates[1],
+                    origin: origin
+                }
+            });
+            this.element.dispatchEvent(event);
+        }
+    }
+
+    /**
      * Image Comparison Slider Class
      */
-    class ImageComparisonSlider {
-        /**
-         * Constructor
-         * @param {HTMLElement} container - The container element
-         */
-        constructor(container) {
-            this.container = container;
-            this.handle = container.querySelector('.cs-handle');
-            this.resizeImg = container.querySelector('.cs-resize-img');
-            this.leftLabel = container.querySelector('.cs-image-label[data-type="left"]');
-            this.rightLabel = container.querySelector('.cs-image-label[data-type="right"]');
-            
-            this.isDragging = false;
-            this.currentPosition = 50; // Percentage
+    class ComparisonSlider {
+        constructor(element) {
+            this.element = element;
+            this.modifiedImg = element.getElementsByClassName('js-compare-slider__img--modified')[0];
+            this.handle = element.getElementsByClassName('js-compare-slider__handle')[0];
+            this.keyboardHandle = element.getElementsByClassName('js-compare-slider__input-handle')[0];
+            this.captions = element.getElementsByClassName('js-compare-slider__caption');
+            this.dragStart = false;
+            this.animating = false;
+            this.leftPosition = 50;
+            this.sliderWidth = this.getSliderWidth();
             
             this.init();
         }
 
-        /**
-         * Initialize the slider
-         */
         init() {
-            // Setup IntersectionObserver for viewport detection
-            this.setupIntersectionObserver();
+            // Check for reduced motion preference
+            const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
             
-            // Setup drag functionality
-            this.setupDragEvents();
+            if (reducedMotion) {
+                this.element.classList.add('compare-slider--reduced-motion', 'compare-slider--in-viewport');
+            } else if ('IntersectionObserver' in window) {
+                this.setupIntersectionObserver();
+            } else {
+                this.element.classList.add('compare-slider--in-viewport');
+                this.removeAnimation();
+            }
             
-            // Setup keyboard navigation
-            this.setupKeyboardNavigation();
+            // Setup swipe gestures
+            new SwipeContent(this.element);
             
-            // Setup resize observer
-            this.setupResizeObserver();
+            // Setup event listeners
+            this.setupEventListeners();
             
-            // Initial label update
-            this.updateLabels();
+            // Setup resize listener
+            window.addEventListener('resize', () => {
+                this.sliderWidth = this.getSliderWidth();
+            });
         }
 
-        /**
-         * Setup IntersectionObserver for lazy animation trigger
-         */
         setupIntersectionObserver() {
-            const options = {
-                root: null,
-                rootMargin: '0px',
-                threshold: 0.5
-            };
-
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        this.container.classList.add('is-visible');
-                        observer.unobserve(this.container);
-                    }
-                });
-            }, options);
-
-            observer.observe(this.container);
-        }
-
-        /**
-         * Setup drag events (mouse and touch)
-         */
-        setupDragEvents() {
-            // Pointer events handle both mouse and touch
-            this.handle.addEventListener('pointerdown', this.onPointerDown.bind(this), { passive: false });
-            
-            // Prevent default drag behavior
-            this.handle.addEventListener('dragstart', (e) => e.preventDefault());
-            
-            // Optimize for touch devices
-            this.handle.style.touchAction = 'none';
-            this.pendingUpdate = false;
-        }
-
-        /**
-         * Handle pointer down event
-         * @param {PointerEvent} e - The pointer event
-         */
-        onPointerDown(e) {
-            e.preventDefault();
-            
-            this.isDragging = true;
-            this.pointerId = e.pointerId;
-            this.handle.classList.add('draggable');
-            this.resizeImg.classList.add('resizable');
-            
-            // Capture pointer for consistent events
-            this.handle.setPointerCapture(e.pointerId);
-            
-            // Add move and up listeners with passive: false for touch
-            this.boundPointerMove = this.onPointerMove.bind(this);
-            this.boundPointerUp = this.onPointerUp.bind(this);
-            
-            document.addEventListener('pointermove', this.boundPointerMove, { passive: false });
-            document.addEventListener('pointerup', this.boundPointerUp);
-            document.addEventListener('pointercancel', this.boundPointerUp);
-            
-            // Update ARIA attribute
-            this.handle.setAttribute('aria-grabbed', 'true');
-        }
-
-        /**
-         * Handle pointer move event with throttling
-         * @param {PointerEvent} e - The pointer event
-         */
-        onPointerMove(e) {
-            if (!this.isDragging) return;
-            
-            e.preventDefault();
-            
-            // Throttle updates using requestAnimationFrame
-            if (!this.pendingUpdate) {
-                this.pendingUpdate = true;
-                requestAnimationFrame(() => {
-                    this.updatePosition(e.clientX);
-                    this.pendingUpdate = false;
-                });
-            }
-        }
-
-        /**
-         * Handle pointer up event
-         * @param {PointerEvent} e - The pointer event
-         */
-        onPointerUp(e) {
-            if (e.pointerId !== this.pointerId) return;
-            
-            this.isDragging = false;
-            this.handle.classList.remove('draggable');
-            this.resizeImg.classList.remove('resizable');
-            
-            // Release pointer capture
-            if (this.handle.hasPointerCapture(e.pointerId)) {
-                this.handle.releasePointerCapture(e.pointerId);
-            }
-            
-            // Remove listeners
-            document.removeEventListener('pointermove', this.boundPointerMove);
-            document.removeEventListener('pointerup', this.boundPointerUp);
-            document.removeEventListener('pointercancel', this.boundPointerUp);
-            
-            // Update ARIA attribute
-            this.handle.setAttribute('aria-grabbed', 'false');
-        }
-
-        /**
-         * Update slider position
-         * @param {number} clientX - The X coordinate
-         */
-        updatePosition(clientX) {
-            const containerRect = this.container.getBoundingClientRect();
-            const handleWidth = this.handle.offsetWidth;
-            
-            // Calculate position
-            let newPosition = ((clientX - containerRect.left) / containerRect.width) * 100;
-            
-            // Constrain between 0 and 100
-            newPosition = Math.max(0, Math.min(100, newPosition));
-            
-            this.currentPosition = newPosition;
-            
-            // Update styles
-            this.handle.style.left = `${newPosition}%`;
-            this.resizeImg.style.width = `${newPosition}%`;
-            
-            // Update labels visibility
-            this.updateLabels();
-            
-            // Update ARIA value
-            this.handle.setAttribute('aria-valuenow', Math.round(newPosition));
-        }
-
-        /**
-         * Setup keyboard navigation (accessibility)
-         */
-        setupKeyboardNavigation() {
-            this.handle.addEventListener('keydown', (e) => {
-                let step = 0;
-                
-                switch(e.key) {
-                    case 'ArrowLeft':
-                    case 'ArrowDown':
-                        step = -1;
-                        break;
-                    case 'ArrowRight':
-                    case 'ArrowUp':
-                        step = 1;
-                        break;
-                    case 'Home':
-                        this.currentPosition = 0;
-                        this.updatePosition(this.container.getBoundingClientRect().left);
-                        e.preventDefault();
-                        return;
-                    case 'End':
-                        this.currentPosition = 100;
-                        this.updatePosition(this.container.getBoundingClientRect().right);
-                        e.preventDefault();
-                        return;
-                    default:
-                        return;
+                if (entries[0].intersectionRatio.toFixed(1) > 0) {
+                    this.element.classList.add('compare-slider--in-viewport');
+                    observer.unobserve(this.element);
                 }
-                
-                if (step !== 0) {
-                    e.preventDefault();
-                    this.currentPosition += step;
-                    this.currentPosition = Math.max(0, Math.min(100, this.currentPosition));
+            }, { threshold: [0, 0.3] });
+            
+            observer.observe(this.element);
+            this.removeAnimation();
+        }
+
+        removeAnimation() {
+            this.modifiedImg.addEventListener('animationend', () => {
+                this.modifiedImg.style.animation = 'none';
+            }, { once: true });
+        }
+
+        setupEventListeners() {
+            // Drag start
+            this.element.addEventListener('dragStart', (event) => {
+                if (event.detail.origin.closest('.js-compare-slider__handle')) {
+                    this.element.classList.add('compare-slider--is-dragging');
                     
-                    const containerRect = this.container.getBoundingClientRect();
-                    const newX = containerRect.left + (this.currentPosition / 100 * containerRect.width);
-                    this.updatePosition(newX);
+                    if (!this.dragStart) {
+                        this.dragStart = event.detail.x;
+                    }
                 }
             });
-        }
-
-        /**
-         * Setup resize observer for responsive updates
-         */
-        setupResizeObserver() {
-            const resizeObserver = new ResizeObserver(() => {
-                requestAnimationFrame(() => {
-                    this.updateLabels();
-                });
+            
+            // Drag end
+            this.element.addEventListener('dragEnd', (event) => {
+                if (this.dragStart !== false) {
+                    this.element.classList.remove('compare-slider--is-dragging');
+                    this.dragStart = false;
+                }
             });
             
-            resizeObserver.observe(this.container);
+            // Dragging (continuous movement)
+            this.element.addEventListener('dragging', (event) => {
+                this.handleMove(event);
+            });
+            
+            // Mouse move (fallback for older logic)
+            this.element.addEventListener('mousemove', (event) => {
+                this.handleMove(event);
+            });
+            
+            // Touch move (fallback for older logic)
+            this.element.addEventListener('touchmove', (event) => {
+                this.handleMove(event);
+            });
+            
+            // Mouse leave
+            this.element.addEventListener('mouseleave', (event) => {
+                this.handleBoundary(event);
+            });
+            
+            // Touch end
+            this.element.addEventListener('touchend', (event) => {
+                this.handleBoundary(event);
+            });
+            
+            // Keyboard navigation
+            this.keyboardHandle.addEventListener('change', () => {
+                this.leftPosition = Number(this.keyboardHandle.value);
+                this.updatePosition(0);
+            });
         }
 
-        /**
-         * Update labels visibility based on position
-         */
-        updateLabels() {
-            if (!this.leftLabel || !this.rightLabel) return;
+        handleMove(event) {
+            if (!this.dragStart) return;
             
-            const leftLabelRect = this.leftLabel.getBoundingClientRect();
-            const rightLabelRect = this.rightLabel.getBoundingClientRect();
-            const resizeRect = this.resizeImg.getBoundingClientRect();
+            const x = event.detail ? event.detail.x : (event.pageX || (event.touches && event.touches[0].pageX));
             
-            // Left label visibility
-            const leftLabelEnd = leftLabelRect.left + leftLabelRect.width;
-            const resizeEnd = resizeRect.left + resizeRect.width;
+            if (!this.animating && Math.abs(x - this.dragStart) >= 5) {
+                this.animating = true;
+                this.updatePosition(x - this.dragStart);
+                this.dragStart = x;
+            }
+        }
+
+        handleBoundary(event) {
+            if (!this.dragStart) return;
             
-            if (leftLabelEnd < resizeEnd) {
-                this.leftLabel.classList.remove('is-hidden');
-            } else {
-                this.leftLabel.classList.add('is-hidden');
+            if (event.pageX < this.element.offsetLeft) {
+                this.leftPosition = 0;
+                this.updatePosition(0);
             }
             
-            // Right label visibility
-            if (rightLabelRect.left > resizeEnd) {
-                this.rightLabel.classList.remove('is-hidden');
-            } else {
-                this.rightLabel.classList.add('is-hidden');
+            if (event.pageX > this.element.offsetLeft + this.element.offsetWidth) {
+                this.leftPosition = 100;
+                this.updatePosition(0);
             }
+        }
+
+        updatePosition(delta) {
+            const percentage = (100 * delta) / this.sliderWidth;
+            
+            if (!isNaN(percentage)) {
+                this.leftPosition = Number((this.leftPosition + percentage).toFixed(2));
+                this.leftPosition = Math.max(0, Math.min(100, this.leftPosition));
+                
+                this.keyboardHandle.value = this.leftPosition;
+                this.handle.style.left = this.leftPosition + '%';
+                this.modifiedImg.style.width = this.leftPosition + '%';
+                
+                this.updateCaptions();
+            }
+            
+            this.animating = false;
+        }
+
+        updateCaptions() {
+            for (let i = 0; i < this.captions.length; i++) {
+                const offset = i === 0 ?
+                    this.captions[i].offsetLeft - this.modifiedImg.offsetLeft - this.modifiedImg.offsetWidth :
+                    this.modifiedImg.offsetLeft + this.modifiedImg.offsetWidth - this.captions[i].offsetLeft - this.captions[i].offsetWidth;
+                
+                this.captions[i].classList.toggle('compare-slider__caption--hide', offset < 10);
+            }
+        }
+
+        getSliderWidth() {
+            return this.element.offsetWidth;
         }
     }
 
@@ -279,18 +309,22 @@
      * Initialize all sliders on the page
      */
     function initSliders() {
-        const containers = document.querySelectorAll('.cs-image-container');
+        const sliders = document.getElementsByClassName('js-compare-slider');
         
-        containers.forEach(container => {
-            new ImageComparisonSlider(container);
-        });
+        for (let i = 0; i < sliders.length; i++) {
+            new ComparisonSlider(sliders[i]);
+        }
     }
 
-    // Initialize when DOM is ready
+    // Auto-initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', initSliders);
     } else {
         initSliders();
     }
+
+    // Expose to global scope
+    window.ComparisonSlider = ComparisonSlider;
+    window.SwipeContent = SwipeContent;
 
 })();

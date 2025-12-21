@@ -29,50 +29,52 @@ if (!ImageComparisonSliderHelper::validateData($params)) {
 
 ?>
 
-<figure
-    class = "cs-image-container img-responsive"
+<div
+    class = "compare-slider js-compare-slider"
     id = "<?php echo $data->moduleId; ?>"
-    role = "group"
-    aria-label = "<?php echo htmlspecialchars($data->ariaLabel, ENT_QUOTES, 'UTF-8'); ?>"
+    aria-hidden = "true"
 >
-    <!-- Right image (background) -->
-    <img
-        src = "<?php echo $data->rightImage; ?>"
-        alt = "<?php echo htmlspecialchars($data->rightAlt, ENT_QUOTES, 'UTF-8'); ?>"
-        loading = "lazy"
-    >
-    <?php if (!empty($data->rightCaption)) { ?>
-        <span class = "cs-image-label" data-type = "right" aria-hidden = "true">
-            <?php echo htmlspecialchars($data->rightCaption, ENT_QUOTES, 'UTF-8'); ?>
-        </span>
-    <?php } ?>
+    <!-- Original/Right image (background) -->
+    <figure class = "compare-slider__img compare-slider__img--original">
+        <img
+            src = "<?php echo $data->rightImage; ?>"
+            alt = "<?php echo htmlspecialchars($data->rightAlt, ENT_QUOTES, 'UTF-8'); ?>"
+            loading = "lazy"
+        >
+        <?php if (!empty($data->rightCaption)) { ?>
+            <figcaption class = "compare-slider__caption js-compare-slider__caption">
+                <?php echo htmlspecialchars($data->rightCaption, ENT_QUOTES, 'UTF-8'); ?>
+            </figcaption>
+        <?php } ?>
+    </figure>
 
-    <!-- Left image (overlay) -->
-    <div class = "cs-resize-img">
+    <!-- Modified/Left image (overlay) -->
+    <figure class = "compare-slider__img compare-slider__img--modified js-compare-slider__img--modified">
         <img
             src = "<?php echo $data->leftImage; ?>"
             alt = "<?php echo htmlspecialchars($data->leftAlt, ENT_QUOTES, 'UTF-8'); ?>"
             loading = "lazy"
         >
         <?php if (!empty($data->leftCaption)) { ?>
-            <span class = "cs-image-label" data-type = "left" aria-hidden = "true">
+            <figcaption class = "compare-slider__caption js-compare-slider__caption">
                 <?php echo htmlspecialchars($data->leftCaption, ENT_QUOTES, 'UTF-8'); ?>
-            </span>
+            </figcaption>
         <?php } ?>
-    </div>
+    </figure>
 
-    <!-- Slider handle with accessibility -->
-    <span
-        class = "cs-handle btn-primary"
-        role = "slider"
-        aria-label = "Image comparison slider"
-        aria-valuemin = "0"
-        aria-valuemax = "100"
-        aria-valuenow = "50"
-        aria-orientation = "horizontal"
-        aria-grabbed = "false"
-        tabindex = "0"
+    <!-- Hidden range input for accessibility -->
+    <input
+        class = "compare-slider__input-handle js-compare-slider__input-handle"
+        type = "range"
+        min = "0"
+        max = "100"
+        step = "1"
+        value = "50"
+        aria-label = "<?php echo htmlspecialchars($data->ariaLabel, ENT_QUOTES, 'UTF-8'); ?>"
     >
-        <i class = "cs-icon" aria-hidden = "true"></i>
+
+    <!-- Visible drag handle -->
+    <span class = "compare-slider__handle js-compare-slider__handle btn btn-primary">
+        <span class = "compare-slider__icon" aria-hidden = "true"></span>
     </span>
-</figure>
+</div>

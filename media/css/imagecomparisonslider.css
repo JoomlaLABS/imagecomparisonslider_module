@@ -1,190 +1,234 @@
 /**
- * Image Comparison Slider
+ * Image Comparison Slider - Modern Vanilla JS Version
  * A handy draggable slider to quickly compare 2 images, powered by modern CSS.
- * https://github.com/CodyHouse/image-comparison-slider
+ * Based on: https://github.com/CodyHouse/image-comparison-slider
  *
- * Copyright CodyHouse - https://codyhouse.co
- * Optimized for Joomla 6+ by Joomla!LABS
- *
- * Released under the MIT License
+ * Original Copyright: CodyHouse - https://codyhouse.co
+ * Modernized for Joomla 6+ by Joomla!LABS
+ * 
+ * @license     Released under the MIT License
+ * 
  * @version 2.0.0
  * @since   2.0.0
  */
 
-.cs-image-container {
+/* -------------------------------- 
+   Base Styles
+-------------------------------- */
+.compare-slider {
     position: relative;
-    margin: 0em auto;
     /* Enable GPU acceleration */
     transform: translateZ(0);
     backface-visibility: hidden;
-    /* Optimize touch scrolling */
-    -webkit-overflow-scrolling: touch;
 }
-.cs-image-container img {
+
+.compare-slider img {
     display: block;
     width: 100%;
+    pointer-events: none;
     /* Optimize image rendering */
     image-rendering: -webkit-optimize-contrast;
     image-rendering: crisp-edges;
 }
 
-.cs-image-label {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    color: #ffffff;
-    padding: 1em;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    opacity: 0;
-    -webkit-transform: translateY(20px);
-    -moz-transform: translateY(20px);
-    -ms-transform: translateY(20px);
-    -o-transform: translateY(20px);
-    transform: translateY(20px);
-    -webkit-transition: -webkit-transform 0.3s 0.7s, opacity 0.3s 0.7s;
-    -moz-transition: -moz-transform 0.3s 0.7s, opacity 0.3s 0.7s;
-    transition: transform 0.3s 0.7s, opacity 0.3s 0.7s;
-}
-.cs-image-label.is-hidden {
-    visibility: hidden;
-}
-.is-visible .cs-image-label {
-    opacity: 1;
-    -webkit-transform: translateY(0);
-    -moz-transform: translateY(0);
-    -ms-transform: translateY(0);
-    -o-transform: translateY(0);
-    transform: translateY(0);
+.compare-slider__inner {
+    position: relative;
 }
 
-.cs-resize-img {
+.compare-slider__img {
+    position: relative;
+    user-select: none;
+    overflow: hidden;
+}
+
+/* -------------------------------- 
+   Captions
+-------------------------------- */
+.compare-slider__caption {
+    position: absolute;
+    bottom: 0;
+    font-size: 0.875rem;
+    padding: 0.75rem;
+    background-color: rgba(0, 0, 0, 0.45);
+    color: #ffffff;
+    backdrop-filter: blur(10px);
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.compare-slider__img--original .compare-slider__caption {
+    right: 0;
+}
+
+.compare-slider__img--modified .compare-slider__caption {
+    left: 0;
+}
+
+/* -------------------------------- 
+   Handle
+-------------------------------- */
+.compare-slider__handle {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 44px;
+    width: 44px;
+    border-radius: 50%;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    cursor: grab;
+    will-change: left;
+    align-items: center;
+    justify-content: center;
+    transform: translateY(-50%) translateX(-50%) scale(0);
+    margin-left: -1px;
+    /* Optimize for touch */
+    touch-action: none;
+    /* GPU acceleration */
+    backface-visibility: hidden;
+}
+
+/* Increase touch target on mobile */
+@media (max-width: 768px) {
+    .compare-slider__handle {
+        height: 54px;
+        width: 54px;
+    }
+}
+
+.compare-slider--is-dragging .compare-slider__handle {
+    cursor: grabbing;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(26, 26, 26, 0.5);
+}
+
+/* Icon inside handle */
+.compare-slider__icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+    /* Use mask to allow color inheritance from parent */
+    mask: url(../images/slide-h.svg) no-repeat center;
+    -webkit-mask: url(../images/slide-h.svg) no-repeat center;
+    mask-size: contain;
+    -webkit-mask-size: contain;
+    background-color: currentColor;
+    /* GPU acceleration */
+    transform: translateZ(0);
+    flex-shrink: 0;
+}
+
+/* -------------------------------- 
+   Input Handle (Hidden)
+-------------------------------- */
+.compare-slider__input-handle {
+    display: none;
     position: absolute;
     top: 0;
     left: 0;
-    width: 0;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.compare-slider__input-handle:focus + .compare-slider__handle {
+    color: #0056b3;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15), 0 0 0 4px rgba(26, 26, 26, 0.5);
+}
+
+/* -------------------------------- 
+   Modified Image
+-------------------------------- */
+.compare-slider__img--modified {
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
-    overflow: hidden;
-    /* Force Hardware Acceleration */
+    width: 0%;
     transform: translateZ(0);
-    backface-visibility: hidden;
+    border-right: 2px solid #ffffff;
     will-change: width;
     /* Optimize for 60fps */
     contain: layout style paint;
 }
-.cs-resize-img img {
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: block;
+
+.compare-slider__img--modified img {
     height: 100%;
     width: auto;
     max-width: none;
     /* GPU acceleration for images */
     transform: translateZ(0);
 }
-.cs-resize-img .cs-image-label {
-    right: auto;
-    left: 0;
-}
-.is-visible .cs-resize-img {
+
+/* -------------------------------- 
+   In Viewport Animation
+-------------------------------- */
+.compare-slider--in-viewport .compare-slider__img--modified {
     width: 50%;
-    /* bounce in animation of the left image */
-    -webkit-animation: cd-bounce-in 0.7s;
-    -moz-animation: cd-bounce-in 0.7s;
-    animation: cd-bounce-in 0.7s;
+    animation: compare-slider-bounce-in 0.7s;
 }
 
-@-webkit-keyframes cd-bounce-in {
-    0% {
-        width: 0;
-    }
-    60% {
-        width: 55%;
-    }
-    100% {
-        width: 50%;
-    }
-}
-@-moz-keyframes cd-bounce-in {
-    0% {
-        width: 0;
-    }
-    60% {
-        width: 55%;
-    }
-    100% {
-        width: 50%;
-    }
-}
-@keyframes cd-bounce-in {
-    0% {
-        width: 0;
-    }
-    60% {
-        width: 55%;
-    }
-    100% {
-        width: 50%;
-    }
-}
-.cs-handle {
-    position: absolute;
-    height: 44px;
-    width: 44px;
-    /* center the element */
-    left: 50%;
-    top: 50%;
-    margin-left: -22px;
-    margin-top: -22px;
-    border-radius: 50%;
-    cursor: move;
-    box-shadow: 0 0 0 6px rgba(0, 0, 0, 0.2), 0 0 10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+.compare-slider__caption {
     opacity: 0;
-    transform: translate3d(0, 0, 0) scale(0);
-    /* Optimize for touch */
-    touch-action: none;
-    will-change: left, transform;
-    /* GPU acceleration */
-    backface-visibility: hidden;
-    /* Center icon with flexbox */
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    transform: translateY(20px);
 }
 
-/* Increase touch target on mobile */
-@media (max-width: 768px) {
-    .cs-handle {
-        height: 54px;
-        width: 54px;
-        margin-left: -27px;
-        margin-top: -27px;
-    }
-}
-
-.cs-handle .cs-icon {
-    height: 36px;
-    width: 36px;
-    display: block;
-    -webkit-mask: url("../images/slide-h.svg") no-repeat 50% 50%;
-    mask: url("../images/slide-h.svg") no-repeat 50% 50%;
-    background-color: #ffffff;
-    /* GPU acceleration */
-    transform: translateZ(0);
-    flex-shrink: 0;
-}
-.cs-handle:hover .cs-icon,
-.cs-handle:active .cs-icon {
-    background-color: #ececec;
-}
-
-.cs-handle.draggable {
-    cursor: grabbing;
-    cursor: -webkit-grabbing;
-}
-.is-visible .cs-handle {
+.compare-slider--in-viewport .compare-slider__caption {
     opacity: 1;
-    transform: translate3d(0, 0, 0) scale(1);
+    transform: translateY(0);
+}
+
+.compare-slider--in-viewport .compare-slider__caption--hide {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.compare-slider__img--original .compare-slider__caption--hide {
+    transform: translateX(30px);
+}
+
+.compare-slider__img--modified .compare-slider__caption--hide {
+    transform: translateX(-30px);
+}
+
+.compare-slider__handle {
+    display: block;
+    display: flex;
+    opacity: 0;
+}
+
+.compare-slider--in-viewport .compare-slider__handle {
     transition: transform 0.3s 0.7s, opacity 0s 0.7s;
+    transform: translateY(-50%) translateX(-50%) scale(1);
+    opacity: 1;
+}
+
+.compare-slider__input-handle {
+    display: block;
+}
+
+/* -------------------------------- 
+   Reduced Motion
+-------------------------------- */
+.compare-slider--reduced-motion .compare-slider__img--modified {
+    animation: none;
+}
+
+.compare-slider--reduced-motion .compare-slider__handle,
+.compare-slider--reduced-motion .compare-slider__caption {
+    transition: none;
+}
+
+/* -------------------------------- 
+   Animations
+-------------------------------- */
+@keyframes compare-slider-bounce-in {
+    0% {
+        width: 0%;
+    }
+    60% {
+        width: 55%;
+    }
+    100% {
+        width: 50%;
+    }
 }
