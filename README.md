@@ -176,6 +176,19 @@ Version 2.0 is a complete rewrite with significant improvements:
 
 ---
 
+## Credits
+
+This module is built using the original concept from:
+
+<a href="https://codyhouse.co/gem/css-jquery-image-comparison-slider" target="_blank"><img src="https://codyhouse.co/demo/style-guide-template/assets/branding/favicon-1.jpg" width="12px" alt="codyhouse.co" /> CodyHouse - Image Comparison Slider</a>
+
+- **CodyHouse** - Original CSS/jQuery Image Comparison Slider concept
+- Modernized and adapted for Joomla 6+ with vanilla JavaScript ES6+
+- Icons: Custom SVG graphics
+- Released under MIT License by CodyHouse
+
+---
+
 ## 🤝 Contributing
 
 We welcome contributions! Here's how you can help:
