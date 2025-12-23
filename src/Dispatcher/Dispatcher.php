@@ -67,20 +67,12 @@ class Dispatcher extends AbstractModuleDispatcher
 
         // Register CSS
         if (!$registry->exists('style', 'imagecomparisonslider.style')) {
-            $wa->registerStyle(
-                'imagecomparisonslider.style',
-                'media/mod_joomlalabs_imagecomparisonslider_module/css/imagecomparisonslider.css'
-            );
+            $wa->registerStyle('imagecomparisonslider.style', 'media/mod_joomlalabs_imagecomparisonslider_module/css/imagecomparisonslider.css', [], []);
         }
 
         // Register JS
         if (!$registry->exists('script', 'imagecomparisonslider.script')) {
-            $wa->registerScript(
-                'imagecomparisonslider.script',
-                'media/mod_joomlalabs_imagecomparisonslider_module/js/imagecomparisonslider.js',
-                [],
-                ['defer' => true, 'type' => 'module']
-            );
+            $wa->registerScript('imagecomparisonslider.script', 'media/mod_joomlalabs_imagecomparisonslider_module/js/imagecomparisonslider.js', [], ['type' => 'module'], []);
         }
     }
 }

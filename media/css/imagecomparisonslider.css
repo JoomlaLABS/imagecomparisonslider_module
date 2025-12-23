@@ -17,6 +17,7 @@
 -------------------------------- */
 .compare-slider {
     position: relative;
+    overflow: hidden;
     /* Enable GPU acceleration */
     transform: translateZ(0);
     backface-visibility: hidden;
@@ -39,6 +40,7 @@
     position: relative;
     user-select: none;
     overflow: hidden;
+    margin: 0;
 }
 
 /* -------------------------------- 
@@ -69,13 +71,13 @@
    Handle
 -------------------------------- */
 .compare-slider__handle {
-    display: none;
+    display: flex !important;
     position: absolute;
     top: 50%;
     left: 50%;
     height: 44px;
     width: 44px;
-    border-radius: 50%;
+    border-radius: 50% !important;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     cursor: grab;
     will-change: left;
@@ -87,6 +89,7 @@
     touch-action: none;
     /* GPU acceleration */
     backface-visibility: hidden;
+    opacity: 0;
 }
 
 /* Increase touch target on mobile */
@@ -188,12 +191,6 @@
 
 .compare-slider__img--modified .compare-slider__caption--hide {
     transform: translateX(-30px);
-}
-
-.compare-slider__handle {
-    display: block;
-    display: flex;
-    opacity: 0;
 }
 
 .compare-slider--in-viewport .compare-slider__handle {
