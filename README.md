@@ -14,9 +14,7 @@
 
 *Compare before/after images with a smooth, draggable slider interface*
 
----
-
-## 📖 About
+## 📖 Description
 
 The **Image Comparison Slider** module allows you to create interactive before/after image comparisons on your Joomla! website. Perfect for showcasing transformations, renovations, photo editing, historical changes, and more.
 
@@ -29,8 +27,6 @@ Built with modern web standards and accessibility in mind, this module delivers 
 - 🏛️ Historical then/now images
 - 🎮 Graphics quality comparisons
 - 🌍 Geographic changes over time
-
----
 
 ## ✨ Features
 
@@ -58,8 +54,6 @@ Built with modern web standards and accessibility in mind, this module delivers 
 - **Performance Optimized** - IntersectionObserver, ResizeObserver APIs
 - **Lightweight** - Minimal footprint, maximum performance
 
----
-
 ## 🎬 Demo
 
 ### Frontend Examples
@@ -84,8 +78,6 @@ Built with modern web standards and accessibility in mind, this module delivers 
 
 ![Configuration Panel](https://joomlalabs.sviluppo.online/images/extension/jl-image-comparison-slider/backend-configuration.png)
 
----
-
 ## 📋 Requirements
 
 | Software | Minimum | Recommended |
@@ -94,8 +86,6 @@ Built with modern web standards and accessibility in mind, this module delivers 
 | **PHP** | 8.1+ | 8.2 or 8.3 |
 | **Browser** | Modern browsers | Chrome 90+, Firefox 88+, Safari 14+, Edge 90+ |
 
----
-
 ## 📦 Installation
 
 1. Download the latest release from [GitHub Releases](https://github.com/JoomlaLABS/imagecomparisonslider_module/releases)
@@ -103,7 +93,24 @@ Built with modern web standards and accessibility in mind, this module delivers 
 3. Upload the downloaded package file
 4. The module will be installed and ready to use
 
----
+### Update from v1.x
+
+⚠️ **Important**: Version 2.0 is a complete rewrite with significant improvements:
+
+### What's New
+- ✅ Modern Joomla 6+ architecture
+- ✅ jQuery removed → Pure vanilla JavaScript
+- ✅ Enhanced accessibility (WCAG 2.1 AAA)
+- ✅ Web Asset Manager integration
+- ✅ Better performance & smaller size
+
+When upgrading from v1.x:
+1. **Backup** your site and database
+2. **Note** your current module settings (But your module settings will be preserved)
+3. **Install** v2.0 (it will upgrade automatically)
+4. **Verify** settings in module configuration
+5. **Test** thoroughly on your staging site first
+6. **Review** the [Changelog](#-changelog) for details
 
 ## ⚙️ Configuration
 
@@ -135,8 +142,6 @@ Built with modern web standards and accessibility in mind, this module delivers 
 
 4. **Publish & Test**
 
----
-
 ## 💡 Usage
 
 ### Keyboard Controls
@@ -154,29 +159,149 @@ Built with modern web standards and accessibility in mind, this module delivers 
 - **Click & Drag** - Drag the center handle left or right
 - **Touch & Swipe** - Swipe the handle on mobile devices
 
----
+## 📋 Changelog
 
-## 🔄 Upgrading from v1.x
+### [2.0.0] - 2025-12-21
 
-Version 2.0 is a complete rewrite with significant improvements:
+#### 🎉 Major Release - Complete Rewrite
 
-### What's New
-- ✅ Modern Joomla 6+ architecture
-- ✅ jQuery removed → Pure vanilla JavaScript
-- ✅ Enhanced accessibility (WCAG 2.1 AAA)
-- ✅ Web Asset Manager integration
-- ✅ Better performance & smaller size
+This is a breaking release that modernizes the module for Joomla 6+ with significant improvements in performance, accessibility, and code quality.
 
-### Migration Steps
-1. **Backup** your site and database
-2. **Note** your current module settings
-3. **Install** v2.0 (it will upgrade automatically)
-4. **Verify** settings in module configuration
-5. **Test** thoroughly on your staging site first
+#### Added
 
----
+##### Architecture
+- ✅ **Namespace support** - `JoomlaLabs\Module\ImageComparisonSlider`
+- ✅ **Service provider** - Modern dependency injection pattern
+- ✅ **Helper class** - `ImageComparisonSliderHelper` for data preparation
+- ✅ **PSR-12 compliance** - Modern PHP coding standards
+- ✅ **Web Asset Manager** integration with `joomla.asset.json`
 
-## Credits
+##### Accessibility (WCAG 2.1 AAA)
+- ✅ **Full keyboard navigation**:
+  - Arrow keys (←/→, ↑/↓) for 1% movement
+  - Home/End keys for quick navigation
+  - Tab for focus management
+- ✅ **ARIA attributes**:
+  - `role="slider"` on handle
+  - `aria-label` for screen readers
+  - `aria-valuenow` (updates dynamically)
+  - `aria-valuemin`/`aria-valuemax`
+  - `aria-orientation="horizontal"`
+  - `aria-grabbed` state during drag
+- ✅ **Semantic HTML**:
+  - `role="group"` on container
+  - `aria-hidden="true"` on decorative elements
+- ✅ **Image accessibility**:
+  - Required alt text fields
+  - `loading="lazy"` for performance
+- ✅ **Focus management**:
+  - Visible focus indicators
+  - Proper tabindex
+  - Focus state announcements
+- ✅ **Motion preferences**:
+  - Respects `prefers-reduced-motion`
+  - Animations can be disabled
+
+##### JavaScript (Modern Vanilla JS)
+- ✅ **ES6+ class-based architecture**
+- ✅ **IntersectionObserver** - Better viewport detection
+- ✅ **ResizeObserver** - Efficient responsive updates
+- ✅ **Pointer Events API** - Unified mouse/touch handling
+- ✅ **requestAnimationFrame** - Smooth 60fps animations
+- ✅ **No jQuery dependency** (~30KB smaller bundle)
+- ✅ **Module pattern** - Encapsulated, no global pollution
+- ✅ **Event delegation** - Better performance
+
+##### Features
+- ✅ **Unique module IDs** - Multiple instances per page
+- ✅ **ARIA label configuration** - Customizable screen reader text
+- ✅ **Validation logic** - Checks required images before rendering
+- ✅ **Improved error handling** - Graceful degradation
+- ✅ **Better browser support** - Modern browsers (2020+)
+
+##### Documentation
+- ✅ **MIGRATION_v2.md** - Complete upgrade guide
+- ✅ **ACCESSIBILITY.md** - Detailed accessibility documentation
+- ✅ **CHANGELOG.md** - Version history (this file)
+- ✅ **Updated README.md** - Modern documentation
+
+#### Changed
+
+##### Breaking Changes
+- ⚠️ **Namespace structure** - All classes now use namespaces
+- ⚠️ **File organization** - New `src/` and `services/` folders
+- ⚠️ **JavaScript rewrite** - Complete rewrite without jQuery
+- ⚠️ **Asset loading** - Web Asset Manager instead of `addScript()`
+- ⚠️ **Template structure** - Updated with accessibility attributes
+- ⚠️ **Minimum requirements**:
+  - Joomla 4.4+ (6.0+ recommended)
+  - PHP 8.1+
+  - Modern browser (no IE11)
+
+##### Improvements
+- 🚀 **Performance**:
+  - 30KB smaller (no jQuery)
+  - IntersectionObserver (lazy activation)
+  - ResizeObserver (efficient resize handling)
+  - requestAnimationFrame (smooth animations)
+  - Lazy image loading
+  - Reduced DOM queries
+  
+- 📦 **Code Quality**:
+  - PSR-12 coding standards
+  - Type declarations (parameters + return types)
+  - Proper error handling
+  - Separation of concerns
+  - Inline documentation
+  
+- 🎨 **User Experience**:
+  - Smoother animations
+  - Better touch support
+  - Keyboard accessible
+  - Screen reader friendly
+  - Respects user preferences
+
+#### Removed
+
+- ❌ **jQuery dependency** - Replaced with vanilla JavaScript
+- ❌ **Legacy code patterns** - Old Joomla 3 style code
+- ❌ **Non-namespaced structure** - Modernized file organization
+- ❌ **IE11 support** - Modern browsers only
+- ❌ **vmousedown/vmousemove** - Replaced with Pointer Events
+
+#### Fixed
+
+- 🐛 **Multiple instances** - Each slider now has unique ID
+- 🐛 **Focus management** - Proper keyboard focus handling
+- 🐛 **Touch events** - Better mobile/tablet support
+- 🐛 **Resize handling** - More efficient window resize
+- 🐛 **Label visibility** - Improved caption show/hide logic
+- 🐛 **Memory leaks** - Proper event listener cleanup
+- 🐛 **Performance issues** - Removed unnecessary reflows
+
+#### Security
+
+- 🔒 **Output escaping** - `$this->escape()` in template
+- 🔒 **Type safety** - PHP 8.1 type declarations
+- 🔒 **Input validation** - Helper class validates data
+- 🔒 **XSS prevention** - Proper HTML attribute handling
+
+### [1.2.0] - 2020-08-19
+
+#### Added
+- Initial public release
+- Basic image comparison slider
+- jQuery-based drag functionality
+- CodyHouse library integration
+
+#### Features
+- Left/right image configuration
+- Alt text fields
+- Caption support
+- Basic responsive design
+- Joomla 4 compatible
+
+## 🙏 Credits
 
 This module is built using the original concept from:
 
@@ -186,8 +311,6 @@ This module is built using the original concept from:
 - Modernized and adapted for Joomla 6+ with vanilla JavaScript ES6+
 - Icons: Custom SVG graphics
 - Released under MIT License by CodyHouse
-
----
 
 ## 🤝 Contributing
 
