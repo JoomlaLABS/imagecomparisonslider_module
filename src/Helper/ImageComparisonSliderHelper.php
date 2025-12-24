@@ -3,7 +3,7 @@
 /**
  * @package     Joomla.Site
  * @subpackage  mod_joomlalabs_imagecomparisonslider_module
- * 
+ *
  * @author      Joomla!LABS <info@joomlalabs.com>
  * @copyright   Copyright (C) 2015 - 2025 Joomla!LABS. All rights reserved.
  * @license     GNU General Public License version 2 or later; see LICENSE.txt
