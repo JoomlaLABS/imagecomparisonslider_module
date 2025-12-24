@@ -8,7 +8,7 @@
     </tstamp>
     <property name="build" value="_build"/>
     <property name="dist" value="_dist"/>
-    <property name="filename" value="mod_joomlalabs_imagecomparisonslider_module_v${VERSION}_j6.zip"/>
+    <property name="filename" value="mod_joomlalabs_imagecomparisonslider_module_v${VERSION}_j4_j5_j6.zip"/>
     
     <!-- Initialize build directories -->
     <target name="init" depends="clean">
