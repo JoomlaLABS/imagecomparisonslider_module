@@ -163,6 +163,37 @@ When upgrading from v1.x:
 
 ## 📋 Changelog
 
+### [2.0.1] - 2025-12-24
+
+#### 🐛 Bug Fixes & Improvements
+
+This is a maintenance release that fixes asset loading issues and improves code quality.
+
+#### Fixed
+
+- **Asset Loading** - Fixed CSS and JS not loading correctly in frontend
+  - Updated `registerStyle()` and `registerScript()` to include all required parameters
+  - Added proper options and attributes arrays for Web Asset Manager
+  - Fixed `type="module"` attribute for ES6 JavaScript module
+
+#### Changed
+
+- **Template Optimization** - Improved HTML structure and code quality
+  - Cleaned up HTML indentation and formatting
+  - Removed unnecessary spaces in attribute declarations
+  - Converted to alternative PHP syntax (`if/endif`) for better readability
+  - Added `htmlspecialchars()` to image URLs for security consistency
+  - Added `loading="lazy"` attribute to images for performance
+
+- **CSS Improvements** - Enhanced slider handle display
+  - Fixed icon centering using flexbox
+  - Removed duplicate `display` declarations
+  - Consolidated opacity settings
+
+#### Security
+
+- 🔒 **Enhanced XSS Protection** - Added `htmlspecialchars()` to all image URL attributes
+
 ### [2.0.0] - 2025-12-21
 
 #### 🎉 Major Release - Complete Rewrite
