@@ -1,7 +1,6 @@
 # Image Comparison Slider Module for Joomla!
 
-![image Image Comparison Slider](https://user-images.githubusercontent.com/906604/91639107-82078d80-ea14-11ea-8a3c-038ee44981bc.png)
-
+![Image Comparison Slider Module for Joomla!](https://repository-images.githubusercontent.com/289335747/c1fe2f28-be7b-4e72-84bf-714f7da5e0f4)
 
 ![GitHub all releases](https://img.shields.io/github/downloads/JoomlaLABS/imagecomparisonslider_module/total?style=for-the-badge&color=blue)
 ![GitHub release (latest by SemVer)](https://img.shields.io/github/downloads/JoomlaLABS/imagecomparisonslider_module/latest/total?style=for-the-badge&color=blue)
@@ -29,6 +28,14 @@ Built with modern web standards and accessibility in mind, this module delivers 
 - 🏛️ Historical then/now images
 - 🎮 Graphics quality comparisons
 - 🌍 Geographic changes over time
+
+## 🖼️ Screenshots
+
+<p align="center">
+  <img src="https://joomlalabs.com/images/extensions/image_comparison_slider-photo-editing.png" width="32%" />
+  <img src="https://joomlalabs.com/images/extensions/image_comparison_slider-renovation.png" width="32%" />
+  <img src="https://joomlalabs.com/images/extensions/image_comparison_slider-historical.png" width="32%" />
+</p>
 
 ## ✨ Features
 
